@@ -38,87 +38,89 @@ public class UniformCostSearchAlgo{
  		
  		//Zerind
 		n2.adjacencies = new Edge[]{
-			//new Edge(n1,75),
+			new Edge(n1,75),
 			new Edge(n3,71)
 		};
  		
 
  		//Oradea
 		n3.adjacencies = new Edge[]{
-			//new Edge(n2,71),
+			new Edge(n2,71),
 			new Edge(n4,151)
 		};
  		
  		//Sibiu
 		n4.adjacencies = new Edge[]{
-			//new Edge(n1,140),
+			new Edge(n1,140),
 			new Edge(n5,99),
-			//new Edge(n3,151),
+			new Edge(n3,151),
 			new Edge(n6,80),
 		};
  		
 
  		//Fagaras
 		n5.adjacencies = new Edge[]{
-			//new Edge(n4,99),
+			new Edge(n4,99),
+
+			//178
 			new Edge(n13,211)
 		};
  		
  		//Rimnicu Vilcea
 		n6.adjacencies = new Edge[]{
-			//new Edge(n4,80),
+			new Edge(n4,80),
 			new Edge(n7,97),
 			new Edge(n12,146)
 		};
  		
  		//Pitesti
 		n7.adjacencies = new Edge[]{
-			//new Edge(n6,97),
+			new Edge(n6,97),
 			new Edge(n13,101),
 			new Edge(n12,138)
 		};
  		
  		//Timisoara
 		n8.adjacencies = new Edge[]{
-			//new Edge(n1,118),
+			new Edge(n1,118),
 			new Edge(n9,111)
 		};
  		
  		//Lugoj
 		n9.adjacencies = new Edge[]{
-			//new Edge(n8,111),
+			new Edge(n8,111),
 			new Edge(n10,70)
 		};
 
  		//Mehadia
 		n10.adjacencies = new Edge[]{
-			//new Edge(n9,70),
+			new Edge(n9,70),
 			new Edge(n11,75)
 		};
  		
  		//Drobeta
 		n11.adjacencies = new Edge[]{
-			//new Edge(n10,75),
+			new Edge(n10,75),
 			new Edge(n12,120)
 		};
 
  		//Craiova
 		n12.adjacencies = new Edge[]{
-			//new Edge(n11,120),
-			//new Edge(n6,146),
-			//new Edge(n7,138)
+			new Edge(n11,120),
+			new Edge(n6,146),
+			new Edge(n7,138)
 		};
 
 		//Bucharest
 		n13.adjacencies = new Edge[]{
-			//new Edge(n7,101),
+			new Edge(n7,101),
 			new Edge(n14,90),
-			//new Edge(n5,211)
+			new Edge(n5,211)
 		};
  		
  		//Giurgiu
 		n14.adjacencies = new Edge[]{
-			//new Edge(n13,90)
+			new Edge(n13,90)
 		};
 
 		UniformCostSearch(n1,n13);
@@ -162,8 +164,9 @@ public class UniformCostSearchAlgo{
 
 			Node current = queue.poll();
 			explored.add(current);
-			System.out.println(current);
+			
 
+			//end if path is found
 			if(current.value.equals(goal.value)){
 				found = true;
 
@@ -176,31 +179,32 @@ public class UniformCostSearchAlgo{
 			for(Edge e: current.adjacencies){
 				Node child = e.target;
 				double cost = e.cost;
-				child.pathCost = current.pathCost + cost;
-
 				
 
+				
+				//add node to queue if node has not been explored
 				if(!explored.contains(child) && !queue.contains(child)){
-					
+					child.pathCost = current.pathCost + cost;
 					child.parent = current;
 					queue.add(child);
 						
 				}
 					
 
-				else if((queue.contains(child))&&(child.pathCost>current.pathCost)){
-					
+				//current path is shorter than previous path found
+				else if((queue.contains(child))&&(child.pathCost>(current.pathCost+cost))){
 					child.parent=current;
-					current = child;
+					child.pathCost = current.pathCost + cost;
+					queue.remove(child);
+					queue.add(child);
 			
 				}
 
 
 			}
 
-			System.out.println(queue);
 			
-		}while(!queue.isEmpty());
+		}while(!queue.isEmpty()&& (found==false));
 
 	}
 
